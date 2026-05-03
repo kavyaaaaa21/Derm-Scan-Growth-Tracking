@@ -1,0 +1,24 @@
+# ── Web framework ─────────────────────────────────────────────────
+fastapi==0.136.0
+uvicorn[standard]==0.46.0
+python-multipart==0.0.26
+ 
+# ── Image processing ──────────────────────────────────────────────
+Pillow==12.2.0
+numpy==1.26.4
+opencv-python-headless==4.9.0.80
+scikit-image==0.26.0
+ 
+# ── Deep learning ─────────────────────────────────────────────────
+tensorflow==2.16.2
+# GPU users: replace the line above with:
+# tensorflow[and-cuda]==2.16.2
+ 
+# ── Auth & Database ───────────────────────────────────────────────
+sqlalchemy==2.0.49
+python-jose[cryptography]==3.5.0
+passlib[bcrypt]==1.7.4
+psycopg2-binary==2.9.12
+ 
+# ── PDF generation ────────────────────────────────────────────────
+reportlab==4.4.10

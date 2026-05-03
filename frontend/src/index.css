@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #070C14;
+    color: #D8E8FF;
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar        { width: 6px; }
+  ::-webkit-scrollbar-track  { background: #0D1625; }
+  ::-webkit-scrollbar-thumb  { background: #1A2E4A; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #00D9C040; }
+}
+
+@layer components {
+  /* ── Cards ──────────────────────────────────────────────── */
+  .ds-card {
+    @apply bg-ds-card border border-ds-border rounded-2xl;
+    background-image: radial-gradient(
+      circle at 50% 0%,
+      rgba(0, 217, 192, 0.04) 0%,
+      transparent 70%
+    );
+  }
+
+  .ds-card-glow {
+    @apply ds-card transition-all duration-300;
+  }
+  .ds-card-glow:hover {
+    border-color: rgba(0, 217, 192, 0.4);
+    box-shadow: 0 0 30px rgba(0, 217, 192, 0.08), inset 0 1px 0 rgba(0, 217, 192, 0.1);
+  }
+
+  /* ── Buttons ─────────────────────────────────────────────── */
+  .btn-primary {
+    @apply relative overflow-hidden px-6 py-3 rounded-xl font-display font-semibold text-ds-bg
+           bg-ds-teal transition-all duration-200 tracking-wide;
+  }
+  .btn-primary:hover {
+    @apply bg-ds-tealDim;
+    box-shadow: 0 0 24px rgba(0, 217, 192, 0.5);
+    transform: translateY(-1px);
+  }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-outline {
+    @apply px-6 py-3 rounded-xl font-display font-semibold text-ds-teal border border-ds-teal
+           bg-transparent transition-all duration-200 tracking-wide;
+  }
+  .btn-outline:hover {
+    @apply bg-ds-teal text-ds-bg;
+    box-shadow: 0 0 20px rgba(0, 217, 192, 0.3);
+  }
+
+  .btn-ghost {
+    @apply px-4 py-2 rounded-lg text-ds-muted hover:text-ds-teal hover:bg-ds-teal/10
+           transition-all duration-200;
+  }
+
+  /* ── Upload zone ──────────────────────────────────────────── */
+  .upload-zone {
+    @apply relative border-2 border-dashed border-ds-border rounded-2xl
+           flex flex-col items-center justify-center gap-3 cursor-pointer
+           transition-all duration-300 text-ds-muted;
+  }
+  .upload-zone:hover,
+  .upload-zone.drag-over {
+    @apply border-ds-teal text-ds-teal;
+    background: rgba(0, 217, 192, 0.04);
+    box-shadow: 0 0 30px rgba(0, 217, 192, 0.08);
+  }
+
+  /* ── Risk badges ─────────────────────────────────────────── */
+  .risk-LOW    { @apply bg-ds-green/15 text-ds-green border border-ds-green/30; }
+  .risk-MEDIUM { @apply bg-ds-amber/15 text-ds-amber border border-ds-amber/30; }
+  .risk-HIGH   { @apply bg-ds-red/15   text-ds-red   border border-ds-red/30;   }
+
+  /* ── Label badges ─────────────────────────────────────────── */
+  .label-benign { @apply bg-ds-green/15 text-ds-green border border-ds-green/30; }
+  .label-consult { @apply bg-ds-red/15 text-ds-red border border-ds-red/30; }
+
+  /* ── Section heading ──────────────────────────────────────── */
+  .section-title {
+    @apply font-display font-bold text-3xl text-ds-text tracking-tight;
+  }
+  .section-sub {
+    @apply text-ds-muted mt-2 text-base leading-relaxed;
+  }
+}
+
+/* ── Background grid ──────────────────────────────────────────── */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(0, 217, 192, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 217, 192, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ── Glow ring on images ──────────────────────────────────────── */
+.img-ring {
+  box-shadow: 0 0 0 1px rgba(0, 217, 192, 0.2),
+              0 0 30px rgba(0, 217, 192, 0.1);
+  border-radius: 1rem;
+}
+
+/* ── Confidence bar ───────────────────────────────────────────── */
+.conf-bar-track {
+  @apply w-full h-2 bg-ds-border rounded-full overflow-hidden;
+}
+.conf-bar-fill {
+  @apply h-full rounded-full transition-all duration-700;
+  background: linear-gradient(90deg, #00D9C0, #00A896);
+}
+
+/* ── Tab underline ────────────────────────────────────────────── */
+.tab-active {
+  @apply text-ds-teal border-b-2 border-ds-teal;
+}
+
+/* ── Scan line overlay ───────────────────────────────────────── */
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+.scanline::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 40%,
+    rgba(0, 217, 192, 0.06) 50%,
+    transparent 60%
+  );
+  animation: scanline 5s linear infinite;
+  pointer-events: none;
+}
+
+/* ── Loading spinner ──────────────────────────────────────────── */
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid rgba(0, 217, 192, 0.2);
+  border-top-color: #00D9C0;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
