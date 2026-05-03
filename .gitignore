@@ -23,8 +23,21 @@ dist-ssr
 *.sln
 *.sw?
 
+# environment
+.env
+
+# python
+.venv/
+__pycache__/
+*.pyc
+
+# node
+node_modules/
+
+# ML models
 models/
 *.keras
 *.h5
-.env
-.venv/
+
+# misc
+.DS_Store
