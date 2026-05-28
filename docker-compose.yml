@@ -2,6 +2,19 @@ version: '3.9'
 
 services:
 
+  postgres:
+    image: postgres:16-alpine
+    container_name: dermscan-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-dermscan}
+      POSTGRES_USER: ${POSTGRES_USER:-dermscan}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secret}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - default
+
   backend:
     build:
       context: ./backend
@@ -14,12 +27,18 @@ services:
       - ./models:/app/models:ro
     environment:
       - MODEL_PATH=/app/models/dermscan_2019.keras
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-dermscan}:${POSTGRES_PASSWORD:-secret}@postgres/dermscan
+      - JWT_SECRET=${JWT_SECRET:-your-secret-key-here}
+    depends_on:
+      - postgres
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
       interval: 30s
       timeout: 10s
       retries: 3
+    networks:
+      - default
 
   frontend:
     build:
@@ -31,20 +50,13 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
+    networks:
+      - default
+
+volumes:
+  pgdata:
 
 networks:
   default:
     name: dermscan-net
-  postgres:
-  image: postgres:16-alpine
-  environment:
-    POSTGRES_DB: dermscan
-    POSTGRES_USER: dermscan
-    POSTGRES_PASSWORD: secret
-  volumes:
-    - pgdata:/var/lib/postgresql/data
 
-backend:
-  environment:
-    - DATABASE_URL=postgresql://dermscan:secret@postgres/dermscan
-    - JWT_SECRET=your-secret-key-here
